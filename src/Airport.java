@@ -41,6 +41,7 @@ public class Airport {
     	// let it go~
     	System.out.println("NO." + flight.getFlightNo() + " departed.");
     	this.incSuccessTakeoff();
+    	totalElapsedDepartureTime += flight.getWaitTime();
     }
     
 	public void start() {
@@ -75,6 +76,7 @@ public class Airport {
 	        			this.incSuccessLand();
 	        			departingList.add((new DepartingPlane(flight.getFlightNo())));
 	        			++currentSuccessLand;
+	        			totalElapsedArrivalTime += flight.getWaitTime();
 	        		}
     			}
         		else if (!departingList.isEmpty()) {
@@ -111,6 +113,9 @@ public class Airport {
     		System.out.println("======//////======");
     		//// END OF DISAPLY ////
     		
+    		//// AVERAGE ////
+	    	totalArrivalLength += arrivingList.size();
+	    	totalDepartureLength += departingList.size();
         	// sub fuel and inc time
         	for (ArrivingPlane flight : arrivingList) {
         		flight.incWaitTime();
@@ -134,9 +139,26 @@ public class Airport {
         			
         		}
         	}
+        	// the departing queue size
+    		System.out.println("departing queue size: " + departingList.size());
+    		// identifier of each flight in the departing queue
+    		System.out.println("departing queue:");
+        	for (DepartingPlane flight : departingList) {
+        		System.out.print("NO." + flight.getFlightNo() + " ");
+        	}
+    		System.out.println();
+	    	totalDepartureLength += departingList.size();
         	++runTimes;
         }
         
+	}
+
+	public int getRunTimes() {
+		return runTimes;
+	}
+
+	public void setRunTimes(int runTimes) {
+		this.runTimes = runTimes;
 	}
 
 	public int getCrashed() {
@@ -174,4 +196,36 @@ public class Airport {
 	public void incSuccessTakeoff() {
 		this.successTakeoff++;
 	}
+	public double getTotalArrivalLength() {
+		return totalArrivalLength;
+	}
+
+	public void setTotalArrivalLength(double totalArrivalLength) {
+		this.totalArrivalLength = totalArrivalLength;
+	}
+
+	public double getTotalDepartureLength() {
+		return totalDepartureLength;
+	}
+
+	public void setTotalDepartureLength(double totalDepartureLength) {
+		this.totalDepartureLength = totalDepartureLength;
+	}
+
+	public double getTotalElapsedArrivalTime() {
+		return totalElapsedArrivalTime;
+	}
+
+	public void setTotalElapsedArrivalTime(double totalElapsedArrivalTime) {
+		this.totalElapsedArrivalTime = totalElapsedArrivalTime;
+	}
+
+	public double getTotalElapsedDepartureTime() {
+		return totalElapsedDepartureTime;
+	}
+
+	public void setTotalElapsedDepartureTime(double totalElapsedDepartureTime) {
+		this.totalElapsedDepartureTime = totalElapsedDepartureTime;
+	}
+
 }

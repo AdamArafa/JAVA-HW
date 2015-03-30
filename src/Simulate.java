@@ -7,10 +7,14 @@ public class Simulate {
 		System.out.println("=== Simulation Start ===");
 		simulation.start();
 		System.out.println("=== Simulation Result ===");
-		System.out.println("Crashed count: " + simulation.getCrashed());
-		System.out.println("Sucess Land count: " + simulation.getSuccessLand());
-		System.out.println("Success Takeoff count: " + simulation.getSuccessTakeoff());
-		System.out.println("bye~");
+		System.out.printf("Average arrivals queue lengths: %3.2f\n", simulation.getTotalArrivalLength() / simulation.getRunTimes());
+		System.out.printf("Average departures queue lengths: %3.2f\n", simulation.getTotalDepartureLength() / simulation.getRunTimes());
+		System.out.printf("Average arrivals elapsed time: %3.2f\n", simulation.getTotalElapsedArrivalTime() / simulation.getRunTimes());
+		System.out.printf("Average departures elapsed time: %3.2f\n", simulation.getTotalElapsedDepartureTime() / simulation.getRunTimes());
+		System.out.println("Sucess arrivals: " + simulation.getSuccessLand());
+		System.out.println("Success departures: " + simulation.getSuccessTakeoff());
+		System.out.println("Total number of crashed: " + simulation.getCrashed());
+		System.out.println("Bye~");
 	}
 
 }
