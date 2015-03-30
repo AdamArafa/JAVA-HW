@@ -1,7 +1,7 @@
 public class Airplane {
 	private int flightNo = 0;
     private int waitTime = 0;
-
+    
     public int getFlightNo() {
 		return flightNo;
 	}
@@ -21,4 +21,5 @@ public class Airplane {
 	public void incWaitTime() {
 		this.waitTime++;
 	}
+	
 }
