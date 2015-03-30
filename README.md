@@ -5,5 +5,6 @@
 
 At the end of the simulation show (print):
 
-1. The average queue lengths per unit oftime for departures and arrivals.2. The average elapsed time (mean waitto land) between arrival and landing. 3. The average elapsed time (mean wait to takeoff) between beginningdeparture and takeoff.4. The total number of successful arrivalsand departures and the total number of crashes due to fuel exhaustion.
+1. The average queue lengths per unit oftime for departures and arrivals.2. The average elapsed time (mean waitto land) between arrival and landing.
+3. The average elapsed time (mean wait to takeoff) between beginningdeparture and takeoff.4. The total number of successful arrivalsand departures and the total number of crashes due to fuel exhaustion.
 ### StrategyThe basic idea is this. You want to create two queues, one for departures and one for arrivals. Each of these queues should contain Flights, including the name of the flight and the time at which it requested the runway.In the simplest possible implementation, you could just have a work loop and advance the time 1 unit at a time. Since planes circling above are consuming fuel, they should have priority over planes awaiting departure from the ground.
