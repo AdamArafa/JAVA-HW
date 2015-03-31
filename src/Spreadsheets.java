@@ -36,6 +36,7 @@ public class Spreadsheets {
 	public Spreadsheets(int col, int row) {
 		// TODO Auto-generated constructor stub
 		cells = new SheetCell[row][col];
+		formulaList = new LinkedList<SheetCell>();
 		for (int r = 0; r < cells.length; ++r) {
 			for (int c = 0; c < cells[r].length; ++c) {
 				String value = input.next().toUpperCase();
@@ -58,6 +59,9 @@ public class Spreadsheets {
 			String value = Interpreter(formulaList.peek().getFormula());
 			if (value != null) {
 				formulaList.poll().setValue(value);
+			}
+			else {
+				formulaList.offerLast(formulaList.pollFirst());
 			}
 		}
 		
