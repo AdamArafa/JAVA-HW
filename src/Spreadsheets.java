@@ -18,12 +18,12 @@ public class Spreadsheets {
 			Pattern pattern = Pattern.compile("([=\\+\\-*])([A-F])([\\d+])");
 			Matcher matcher = pattern.matcher(value);
 			while (matcher.find()) {
-				int row = Integer.parseInt(matcher.group(3));
+				int row = Integer.parseInt(matcher.group(3)) - 1;
 				int col = matcher.group(2).charAt(0) - 'A';
 				SheetCell cell = getCells(row, col);
 				if (cell == null) return null;
 				if (cell.getFormula() != null && cell.getValue() == null) return null;
-				if (matcher.group(1) != "=") {
+				if (!matcher.group(1).equals("=")) {
 					newValue += matcher.group(1);
 				}
 				newValue += cell.getValue();
@@ -35,10 +35,12 @@ public class Spreadsheets {
 	
 	public Spreadsheets(int col, int row) {
 		// TODO Auto-generated constructor stub
+		this.col = col;
+		this.row = row;
 		cells = new SheetCell[row][col];
 		formulaList = new LinkedList<SheetCell>();
-		for (int r = 0; r < cells.length; ++r) {
-			for (int c = 0; c < cells[r].length; ++c) {
+		for (int r = 0; r < row; ++r) {
+			for (int c = 0; c < col; ++c) {
 				String value = input.next().toUpperCase();
 				if (value.charAt(0) == '=') {
 					String interprete = Interpreter(value);
@@ -105,7 +107,7 @@ public class Spreadsheets {
 	}
 
 	public SheetCell getCells(int row, int col) {
-		if (row > getRow() || col > getCol()) throw new RuntimeException("Out of range");
+		if (row >= getRow() || col >= getCol()) throw new RuntimeException("Out of range");
 		return cells[row][col];
 	}
 	
