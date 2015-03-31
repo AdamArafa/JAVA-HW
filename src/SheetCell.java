@@ -1,5 +1,4 @@
 
-
 public class SheetCell {
 	
 	String value;
@@ -18,6 +17,22 @@ public class SheetCell {
 		this(r,c);
 	    this.value   = value;
 	    this.formula = formula;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public String getFormula() {
+		return formula;
+	}
+
+	public void setFormula(String formula) {
+		this.formula = formula;
 	}
 	
 }
