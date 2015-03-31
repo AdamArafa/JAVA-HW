@@ -50,6 +50,7 @@ public class Airport {
 		LinkedList<DepartingPlane> departingList = new LinkedList<DepartingPlane>();
 		AtomicInteger UUID = new AtomicInteger();
 
+		System.out.println("=== Simulation Start ===");
         while ((runTimes <= simulateTimes) || !arrivingList.isEmpty()) {
         	int currentSuccessLand = 0, currentSuccessTakeoff = 0, currentCrashed = 0;
         	// the current time interval number
@@ -151,6 +152,18 @@ public class Airport {
         	++runTimes;
         }
         
+	}
+	
+	public void end()
+	{
+		System.out.println("=== Simulation Result ===");
+		System.out.printf("Average arrivals queue lengths: %3.2f\n", getTotalArrivalLength() / getRunTimes());
+		System.out.printf("Average departures queue lengths: %3.2f\n", getTotalDepartureLength() / getRunTimes());
+		System.out.printf("Average arrivals elapsed time: %3.2f\n", getTotalElapsedArrivalTime() / getRunTimes());
+		System.out.printf("Average departures elapsed time: %3.2f\n", getTotalElapsedDepartureTime() / getRunTimes());
+		System.out.println("Sucess arrivals: " + getSuccessLand());
+		System.out.println("Success departures: " + getSuccessTakeoff());
+		System.out.println("Total number of crashed: " + getCrashed());
 	}
 
 	public int getRunTimes() {
