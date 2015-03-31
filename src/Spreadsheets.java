@@ -37,7 +37,7 @@ public class Spreadsheets {
 		// TODO Auto-generated constructor stub
 		cells = new SheetCell[row][col];
 		for (int r = 0; r < cells.length; ++r) {
-			for (int c = 0; c < cells[c].length; ++c) {
+			for (int c = 0; c < cells[r].length; ++c) {
 				String value = input.next().toUpperCase();
 				if (value.charAt(0) == '=') {
 					String interprete = Interpreter(value);
