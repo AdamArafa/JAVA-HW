@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,7 +9,7 @@ public class Spreadsheets {
 	Scanner input = new Scanner(System.in);
 	private int row, col;
 	private SheetCell[][] cells;
-	private ArrayList<SheetCell> formulaList;
+	private LinkedList<SheetCell> formulaList;
 	private static Scanner input2;
 	
 	private String Interpreter(String value) {
@@ -44,19 +44,23 @@ public class Spreadsheets {
 					cells[r][c] = new SheetCell(r, c, interprete, value);
 					if (interprete == null) {
 						formulaList.add(cells[r][c]);
-						
 					}
-					
 				}
 				else {
-					cells[r][c] = new SheetCell(r, c, value, null);
-					
+					cells[r][c] = new SheetCell(r, c, value, null);			
 				}
 				
 			}
 			
 		}
-
+		// Interprets all
+		while (!formulaList.isEmpty()) {
+			String value = Interpreter(formulaList.peek().getFormula());
+			if (value != null) {
+				formulaList.poll().setValue(value);
+			}
+		}
+		
 	}
 	
 	public void printSpreadsheets() {
