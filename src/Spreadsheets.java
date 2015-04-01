@@ -6,11 +6,9 @@ import java.util.regex.Pattern;
 
 public class Spreadsheets {
 
-	Scanner input = new Scanner(System.in);
 	private int row, col;
 	private SheetCell[][] cells;
 	private LinkedList<SheetCell> formulaList;
-	private static Scanner input2;
 	
 	private String Interpreter(String value) {
 		if (value.charAt(0) == '=') {
@@ -33,7 +31,7 @@ public class Spreadsheets {
 		return null;
 	}
 	
-	public Spreadsheets(int col, int row) {
+	public Spreadsheets(Scanner input, int col, int row) {
 		// TODO Auto-generated constructor stub
 		this.col = col;
 		this.row = row;
@@ -82,10 +80,10 @@ public class Spreadsheets {
 	}
 	
 	public static void main(String[] args) {
-		input2 = new Scanner(System.in);
-		int col = input2.nextInt();
-		int row = input2.nextInt();
-		Spreadsheets spreadsheets = new Spreadsheets(col, row);
+		Scanner input = new Scanner(System.in);
+		int col = input.nextInt();
+		int row = input.nextInt();
+		Spreadsheets spreadsheets = new Spreadsheets(input, col, row);
 		spreadsheets.printSpreadsheets();
 		
 	}
