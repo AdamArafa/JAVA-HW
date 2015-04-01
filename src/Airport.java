@@ -79,6 +79,10 @@ public class Airport {
 	        			++currentSuccessLand;
 	        			totalElapsedArrivalTime += flight.getWaitTime();
 	        		}
+            		else {
+            			takeOff(departingList.poll());
+            			++currentSuccessTakeoff;
+            		}
     			}
         		else if (!departingList.isEmpty()) {
         			takeOff(departingList.poll());
