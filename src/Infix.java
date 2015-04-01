@@ -6,7 +6,7 @@ public class Infix {
 
 	public int infix(String expression) {
         expression = expression.replaceAll("[\t\n ]", "") + "=";
-        String operator = "+-*=";
+        final String operator = "+-*=";
         StringTokenizer tokenizer = new StringTokenizer(expression, operator, true);
         Stack<String> operatorStack = new Stack<String>();
         Stack<String> valueStack = new Stack<String>();
