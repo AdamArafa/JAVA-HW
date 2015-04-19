@@ -8,14 +8,14 @@
  *
  * @author Albert
  */
-public class MASTER {
+public class MASTER extends MasterUI {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        MasterUI main = new MasterUI();
+        MASTER main = new MASTER();
         
     }
     
