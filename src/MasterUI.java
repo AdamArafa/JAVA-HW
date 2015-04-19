@@ -121,16 +121,22 @@ public class MasterUI extends JFrame implements ActionListener {
         String cmd = e.getActionCommand();
         boolean isColor = java.util.Arrays.asList(colors).contains(cmd);
         if (isColor) {
-            userMaster += cmd;
-            jTextField1.setText(userMaster);
-            // System.out.println(cmd);
+            if (userMaster.length() < 5) {
+                userMaster += cmd;
+                jTextField1.setText(userMaster);
+                // System.out.println(cmd);
+            }
         }
         if (cmd.equals("backspace")) {
             userMaster = userMaster.substring(0, userMaster.length()-1);
             jTextField1.setText(userMaster);
         }
         if (cmd.equals("submit")) {
-            
+            for (int i = 0; i < 5; ++i) {
+                jBtnFlags[i].setEnabled(false);
+            }
+            jButton6.setEnabled(false);
+            jButton7.setEnabled(false);
         }
         
     }
