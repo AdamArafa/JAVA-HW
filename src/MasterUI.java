@@ -5,6 +5,7 @@
  */
 
 import java.awt.*;
+import java.util.ArrayList;
 import javax.swing.*;
 /**
  *
@@ -30,7 +31,7 @@ public class MasterUI extends JFrame {
     public MasterUI() {
         initComponents();
         this.setTitle("MASTER");
-        this.setSize(250, 400);
+        // this.setSize(250, 400);
         this.setLocationRelativeTo(null); // Center the frame
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
@@ -42,6 +43,13 @@ public class MasterUI extends JFrame {
     private JButton jButton6;
     private JButton jButton7;
     private JButton[] jBtnFlags;
+    
+    private JTextField[] jTfTriel;
+    private JButton[] jBnFlagB;
+    private JTextField[] jTFieldB;
+    private JButton[] jBnFlagW;
+    private JTextField[] jTFieldW;
+    // private ArrayList triel;
     
     private void initComponents() {
         
@@ -57,7 +65,7 @@ public class MasterUI extends JFrame {
         
         getContentPane().setLayout(new GridBagLayout());
         getContentPane().add(jLabel1, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.BOTH, GridBagConstraints.CENTER));
-        getContentPane().add(jTextField1, new GridBagConstraints(1, 0, 5, 1, 0, 0, GridBagConstraints.BOTH, GridBagConstraints.WEST));
+        getContentPane().add(jTextField1, new GridBagConstraints(1, 0, 4, 1, 0, 0, GridBagConstraints.BOTH, GridBagConstraints.WEST));
         
         jBtnFlags = new JButton[5];
         String colors[] = {"R", "G", "B", "Y", "O"};
@@ -65,11 +73,34 @@ public class MasterUI extends JFrame {
             jBtnFlags[i] = new JButton(colors[i]);
             getContentPane().add(jBtnFlags[i], new GridBagConstraints(i, 1, 1, 1, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.NORTH));
         }
-        getContentPane().add(jButton6, new GridBagConstraints(0, 2, 3, 1, 0, 0, GridBagConstraints.BOTH, GridBagConstraints.NORTH));
-        getContentPane().add(jButton7, new GridBagConstraints(3, 2, 3, 1, 0, 0, GridBagConstraints.BOTH, GridBagConstraints.NORTH));
-        getContentPane().add(jTextField2, new GridBagConstraints(0, 3, 7, 1, 0, 0, GridBagConstraints.BOTH, GridBagConstraints.SOUTH));
+        getContentPane().add(jButton6, new GridBagConstraints(0, 2, 3, 1, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.NORTH));
+        getContentPane().add(jButton7, new GridBagConstraints(3, 2, 2, 1, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.NORTH));
         
-        
-        
+        JPanel jPanel = new JPanel();
+        jPanel.setLayout(new GridBagLayout());
+        jTfTriel = new JTextField[10];
+        jBnFlagB = new JButton[10];
+        jTFieldB = new JTextField[10];
+        jBnFlagW = new JButton[10];
+        jTFieldW = new JTextField[10];
+        for (int i = 0; i < 10; ++i) {
+            JLabel jLabelTriel = new JLabel(" triel" + i);
+            jTfTriel[i] = new JTextField();
+            jBnFlagB[i] = new JButton("B");
+            jTFieldB[i] = new JTextField();
+            jBnFlagW[i] = new JButton("W");
+            jTFieldW[i] = new JTextField();
+            
+            jPanel.add(jLabelTriel, new GridBagConstraints(0, i, 1, 1, 0, 1, GridBagConstraints.NONE, GridBagConstraints.CENTER));
+            jPanel.add(jTfTriel[i], new GridBagConstraints(1, i, 3, 1, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER));
+            jPanel.add(jBnFlagB[i], new GridBagConstraints(4, i, 1, 1, 0, 1, GridBagConstraints.NONE, GridBagConstraints.CENTER));
+            jPanel.add(jTFieldB[i], new GridBagConstraints(5, i, 2, 1, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER));
+            jPanel.add(jBnFlagW[i], new GridBagConstraints(7, i, 1, 1, 0, 1, GridBagConstraints.NONE, GridBagConstraints.CENTER));
+            jPanel.add(jTFieldW[i], new GridBagConstraints(8, i, 2, 1, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER));
+            
+        }
+        getContentPane().add(jPanel, new GridBagConstraints(0, 3, 10, 5, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER));
+        getContentPane().add(jTextField2, new GridBagConstraints(0, 13, 5, 1, 0, 0, GridBagConstraints.BOTH, GridBagConstraints.SOUTH));        
+        pack();
     }
 }
