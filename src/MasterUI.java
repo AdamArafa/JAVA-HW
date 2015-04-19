@@ -59,13 +59,18 @@ public class MasterUI extends JFrame implements ActionListener {
         jTextField1 = new JTextField();
         jTextField1.setEditable(false);
         jTextField2 = new JTextField();
+        jTextField2.setEditable(false);
         jButton6 = new JButton();
         jButton7 = new JButton();
 
         jLabel1.setText("Puzzle");
         jLabel1.setHorizontalAlignment(JLabel.CENTER);
         jButton6.setText("backspace");
+        jButton6.setActionCommand("backspace");
+        jButton6.addActionListener(this);
         jButton7.setText("submit");
+        jButton7.setActionCommand("submit");
+        jButton7.addActionListener(this);
         
         getContentPane().setLayout(new GridBagLayout());
         getContentPane().add(jLabel1, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.BOTH, GridBagConstraints.NORTH));
@@ -92,6 +97,7 @@ public class MasterUI extends JFrame implements ActionListener {
             JLabel jLabelTriel = new JLabel(" triel" + i);
             jLabelTriel.setHorizontalAlignment(JLabel.CENTER);
             jTfTriel[i] = new JTextField();
+            jTfTriel[i].setEditable(false);
             jBnFlagB[i] = new JButton("B");
             jTFieldB[i] = new JTextField();
             jBnFlagW[i] = new JButton("W");
@@ -118,6 +124,13 @@ public class MasterUI extends JFrame implements ActionListener {
             userMaster += cmd;
             jTextField1.setText(userMaster);
             // System.out.println(cmd);
+        }
+        if (cmd.equals("backspace")) {
+            userMaster = userMaster.substring(0, userMaster.length()-1);
+            jTextField1.setText(userMaster);
+        }
+        if (cmd.equals("submit")) {
+            
         }
         
     }
