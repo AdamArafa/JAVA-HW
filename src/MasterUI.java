@@ -100,11 +100,9 @@ public class MasterUI extends JFrame implements ActionListener {
             jTfTriel[i] = new JTextField();
             jTfTriel[i].setEditable(false);
             jBnFlagB[i] = new JButton("B");
-            jTFieldB[i] = new JTextField();
-            jTFieldB[i].setText("-1");
+            jTFieldB[i] = new JTextField("-1");
             jBnFlagW[i] = new JButton("W");
-            jTFieldW[i] = new JTextField();
-            jTFieldW[i].setText("-1");
+            jTFieldW[i] = new JTextField("-1");
             jBnFlagB[i].setActionCommand("triel");
             jBnFlagB[i].addActionListener(this);
             jBnFlagW[i].setActionCommand("triel");
@@ -147,20 +145,24 @@ public class MasterUI extends JFrame implements ActionListener {
                 }
                 jButton6.setEnabled(false);
                 jButton7.setEnabled(false);
-                jTextField2.setText("");
+                jTextField2.setText("Not done yet :P");
             }
         }
         if (cmd.equals("triel")) {
             int indeOfFlagB = java.util.Arrays.asList(jBnFlagB).indexOf(e.getSource());
             int indeOfFlagW = java.util.Arrays.asList(jBnFlagW).indexOf(e.getSource());
             if (indeOfFlagB > -1) {
-                int c = parseInt(jTFieldB[indeOfFlagB].getText()) + 1;
+                int c = parseInt(jTFieldB[indeOfFlagB].getText());
+                // TODO
+                ++c;
                 if (c <= 5 && c + parseInt(jTFieldW[indeOfFlagB].getText()) <= 5) {
                     jTFieldB[indeOfFlagB].setText("" + c);
                 }
             }
             if (indeOfFlagW > -1) {
-                int c = parseInt(jTFieldW[indeOfFlagW].getText()) + 1;
+                int c = parseInt(jTFieldW[indeOfFlagW].getText());
+                // TODO
+                ++c;
                 if (c <= 5 && c + parseInt(jTFieldB[indeOfFlagW].getText()) <= 5) {
                     jTFieldW[indeOfFlagW].setText("" + c);
                 }
