@@ -18,7 +18,8 @@ public class MASTER extends JFrame implements ActionListener {
 
     private int guessTimes;
     private UserPanel uPanel;
-    private SubmitPanel sPanel;
+    private PPlayer pp;
+    private PPlayer pc;
     
     MASTER() {
         initComponents();
@@ -29,108 +30,136 @@ public class MASTER extends JFrame implements ActionListener {
     }
     
     private void initComponents() {
+        guessTimes = 0;
+        pp = new PPlayer();
+        pc = new PPlayer();
+        // here is the answer
+        System.out.println(pc.getPlayerColor());
         setResizable(false);
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        getContentPane().add(new UserPanel());
+        getContentPane().add(uPanel = new UserPanel());
         getContentPane().add(new SubmitPanel());
         pack();        
     }
     
     class UserPanel extends JPanel {
-            Trial[] trials;
+        class Trial extends JPanel {
+            JTextField jTxtfield;
+            JLabel blackPin;
+            JTextField bkField;
+            JLabel whitePin;
+            JTextField whField;
 
-            UserPanel() {
-                this.setLayout(new GridLayout(0, 1));
-                this.trials = new Trial[10];
-                for (int i = 0; i < 10; i++) {
-                    add(this.trials[i] = new Trial(i + 1));
-                }
+            Trial(int num) {
+                setLayout(new FlowLayout());
+                this.add(new JLabel("Trial" + String.format("%02d", num)));
+                this.add(jTxtfield = new JTextField(14));
+                this.add(blackPin = new JLabel("B"));
+                this.add(bkField = new JTextField(3));
+                this.add(whitePin = new JLabel("W"));
+                this.add(whField = new JTextField(3));
+                jTxtfield.setEditable(false);
+                bkField.setEditable(false);
+                whField.setEditable(false);
             }
 
-            class Trial extends JPanel {
-                JTextField jTxtfield;
-                JLabel blackPin;
-                JTextField bkField;
-                JLabel whitePin;
-                JTextField whField;
+            void setButtonEnabled(boolean enabled) {
+                blackPin.setEnabled(enabled);
+                whitePin.setEnabled(enabled);
+            }
+        }
+        public Trial[] trials;
+        UserPanel() {
+            this.setLayout(new GridLayout(0, 1));
+            this.trials = new Trial[10];
+            for (int i = 0; i < 10; i++) {
+                add(this.trials[i] = new Trial(i + 1));
+            }
+        }
+            
+    }
+        
+    class SubmitPanel extends JPanel implements ActionListener {
+        JButton[] jBtnFlags;
+        JButton SubmitButton;
+        JButton BackspaceButton;
+        JPanel buttonPanel;
+        JPanel subPanel;
+        private final String colors[] = {"R", "G", "B", "Y", "O"};
 
-                Trial(int num) {
-                    setLayout(new FlowLayout());
-                    this.add(new JLabel("Trial" + String.format("%02d", num)));
-                    this.add(jTxtfield = new JTextField(14));
-                    this.add(blackPin = new JLabel("B"));
-                    this.add(bkField = new JTextField(3));
-                    this.add(whitePin = new JLabel("W"));
-                    this.add(whField = new JTextField(3));
-                    jTxtfield.setEditable(false);
-                    bkField.setEditable(false);
-                    whField.setEditable(false);
+        SubmitPanel() {
+            this.setLayout(new GridLayout(2, 0));
+            buttonPanel = new JPanel(new GridLayout(0, 5));
+            jBtnFlags = new JButton[5];
+            for (int i = 0; i < 5; ++i) {
+                jBtnFlags[i] = new JButton(colors[i]);
+                jBtnFlags[i].setActionCommand(colors[i]);
+                jBtnFlags[i].addActionListener(this);
+                buttonPanel.add(jBtnFlags[i]);
+            }
+            subPanel = new JPanel(new GridLayout(0, 2));
+            subPanel.add(SubmitButton = new JButton("Submit"));
+            SubmitButton.setActionCommand("Submit");
+            subPanel.add(BackspaceButton = new JButton("Backspace"));
+            BackspaceButton.setActionCommand("Backspace");
+            this.BackspaceButton.addActionListener(this);
+            this.SubmitButton.addActionListener(this);
+            this.add(buttonPanel);
+            this.add(subPanel);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String cmd = e.getActionCommand();
+            boolean isColor = java.util.Arrays.asList(colors).contains(cmd);
+            JTextField txtField = uPanel.trials[guessTimes].jTxtfield;
+            String uMaster = txtField.getText();
+
+            if (isColor) {
+                if (uMaster.length() < 5) {
+                    uMaster += cmd;
+                    txtField.setText(uMaster);
                 }
+            }
+            if (cmd.equals("Backspace")) {
+                uMaster = uMaster.substring(0, uMaster.length()-1);
+                txtField.setText(uMaster);
+            }
+            if (cmd.equals("Submit")) {
+                if (uMaster.length() < 5) {
+                    JOptionPane.showMessageDialog(new JFrame(),
+                            "Input less than 5 characters",
+                            "Invalid Input",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                }
+                else {
 
-                void setButtonEnabled(boolean enabled) {
-                    blackPin.setEnabled(enabled);
-                    whitePin.setEnabled(enabled);
+                    pp.setPlayerColor(uMaster);
+                    PPlayer.PinCount count = PPlayer.compare(pp, pc);
+                    uPanel.trials[guessTimes].bkField.setText("" + count.BKCount);
+                    uPanel.trials[guessTimes].whField.setText("" + count.WHCount);
+                    guessTimes++;
+                    if (count.BKCount == 5) {
+                        JOptionPane.showMessageDialog(new Frame(),
+                            "You Win!",
+                            "GAME OVER",
+                            JOptionPane.INFORMATION_MESSAGE
+                        );
+                        System.exit(0);
+                    }
+                    if (guessTimes == 10) {
+                        JOptionPane.showMessageDialog(new Frame(),
+                                "You Lose!",
+                                "GAME OVER",
+                                JOptionPane.INFORMATION_MESSAGE
+                        );
+                        System.exit(1);
+                    }
                 }
             }
         }
-        
-        class SubmitPanel extends JPanel implements ActionListener {
-            JButton[] jBtnFlags;
-            JButton SubmitButton;
-            JButton BackspaceButton;
-            JPanel buttonPanel;
-            JPanel subPanel;
-            private final String colors[] = {"R", "G", "B", "Y", "O"};
-            
-            SubmitPanel() {
-                this.setLayout(new GridLayout(2, 0));
-                buttonPanel = new JPanel(new GridLayout(0, 5));
-                jBtnFlags = new JButton[5];
-                for (int i = 0; i < 5; ++i) {
-                    jBtnFlags[i] = new JButton(colors[i]);
-                    jBtnFlags[i].setActionCommand(colors[i]);
-                    jBtnFlags[i].addActionListener(this);
-                    buttonPanel.add(jBtnFlags[i]);
-                }
-                subPanel = new JPanel(new GridLayout(0, 2));
-                subPanel.add(SubmitButton = new JButton("Submit"));
-                SubmitButton.setActionCommand("Submit");
-                subPanel.add(BackspaceButton = new JButton("Backspace"));
-                BackspaceButton.setActionCommand("Backspace");
-                this.BackspaceButton.addActionListener(this);
-                this.SubmitButton.addActionListener(this);
-                this.add(buttonPanel);
-                this.add(subPanel);
-            }
-            
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String cmd = e.getActionCommand();
-                boolean isColor = java.util.Arrays.asList(colors).contains(cmd);
-                JTextField txtField = uPanel.trials[guessTimes].jTxtfield;
-                String uMaster = txtField.getText();
-                
-                if (isColor) {
-                    if (uMaster.length() < 5) {
-                        uMaster += cmd;
-                        txtField.setText(uMaster);
-                        // System.out.println(cmd);
-                    }
-                }
-                if (cmd.equals("backspace")) {
-                    uMaster = uMaster.substring(0, uMaster.length()-1);
-                    txtField.setText(uMaster);
-                }
-                if (cmd.equals("submit")) {
-                    if (uMaster.length() < 5) {
-                        JOptionPane.showMessageDialog(new JFrame(),
-                                "Input less than 5 characters",
-                                "Invalid Input",
-                                JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
-                }
-            }
+    }
         
     
     /**
