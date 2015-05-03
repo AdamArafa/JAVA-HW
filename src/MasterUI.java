@@ -51,7 +51,7 @@ public class MasterUI extends JFrame implements ActionListener {
     private JTextField[] jTFieldW;
     
     private final String colors[] = {"R", "G", "B", "Y", "O"};
-    private String userMaster = "";
+    private String uMaster = "";
     
     private void initComponents() {
         
@@ -121,22 +121,28 @@ public class MasterUI extends JFrame implements ActionListener {
         String cmd = e.getActionCommand();
         boolean isColor = java.util.Arrays.asList(colors).contains(cmd);
         if (isColor) {
-            if (userMaster.length() < 5) {
-                userMaster += cmd;
-                jTextField1.setText(userMaster);
+            if (uMaster.length() < 5) {
+                uMaster += cmd;
+                jTextField1.setText(uMaster);
                 // System.out.println(cmd);
             }
         }
         if (cmd.equals("backspace")) {
-            userMaster = userMaster.substring(0, userMaster.length()-1);
-            jTextField1.setText(userMaster);
+            uMaster = uMaster.substring(0, uMaster.length()-1);
+            jTextField1.setText(uMaster);
         }
         if (cmd.equals("submit")) {
-            for (int i = 0; i < 5; ++i) {
-                jBtnFlags[i].setEnabled(false);
+             if (uMaster.length() < 5) {
+                jTextField2.setText("Input Error!");
+             }
+            else {
+                for (int i = 0; i < 5; ++i) {
+                    jBtnFlags[i].setEnabled(false);
+                }
+                jButton6.setEnabled(false);
+                jButton7.setEnabled(false);
+                jTextField2.setText("");
             }
-            jButton6.setEnabled(false);
-            jButton7.setEnabled(false);
         }
         
     }
