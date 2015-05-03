@@ -33,6 +33,9 @@ public class MASTER extends JFrame implements ActionListener {
         else if (result == JOptionPane.NO_OPTION) {
             MASTER main = new MASTER();
         }
+        else {
+            System.exit(1);
+        }
     }
 
     @Override
