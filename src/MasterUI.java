@@ -6,6 +6,7 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import static java.lang.Integer.parseInt;
 import javax.swing.*;
 /**
  *
@@ -100,9 +101,14 @@ public class MasterUI extends JFrame implements ActionListener {
             jTfTriel[i].setEditable(false);
             jBnFlagB[i] = new JButton("B");
             jTFieldB[i] = new JTextField();
+            jTFieldB[i].setText("-1");
             jBnFlagW[i] = new JButton("W");
             jTFieldW[i] = new JTextField();
-            
+            jTFieldW[i].setText("-1");
+            jBnFlagB[i].setActionCommand("triel");
+            jBnFlagB[i].addActionListener(this);
+            jBnFlagW[i].setActionCommand("triel");
+            jBnFlagW[i].addActionListener(this);
             jPanel.add(jLabelTriel, new GridBagConstraints(0, i, 1, 1, 0, 1, GridBagConstraints.NONE, GridBagConstraints.CENTER));
             jPanel.add(jTfTriel[i], new GridBagConstraints(1, i, 3, 1, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.CENTER));
             jPanel.add(jBnFlagB[i], new GridBagConstraints(4, i, 1, 1, 0, 1, GridBagConstraints.NONE, GridBagConstraints.CENTER));
@@ -142,6 +148,22 @@ public class MasterUI extends JFrame implements ActionListener {
                 jButton6.setEnabled(false);
                 jButton7.setEnabled(false);
                 jTextField2.setText("");
+            }
+        }
+        if (cmd.equals("triel")) {
+            int indeOfFlagB = java.util.Arrays.asList(jBnFlagB).indexOf(e.getSource());
+            int indeOfFlagW = java.util.Arrays.asList(jBnFlagW).indexOf(e.getSource());
+            if (indeOfFlagB > -1) {
+                int c = parseInt(jTFieldB[indeOfFlagB].getText()) + 1;
+                if (c <= 5 && c + parseInt(jTFieldW[indeOfFlagB].getText()) <= 5) {
+                    jTFieldB[indeOfFlagB].setText("" + c);
+                }
+            }
+            if (indeOfFlagW > -1) {
+                int c = parseInt(jTFieldW[indeOfFlagW].getText()) + 1;
+                if (c <= 5 && c + parseInt(jTFieldB[indeOfFlagW].getText()) <= 5) {
+                    jTFieldW[indeOfFlagW].setText("" + c);
+                }
             }
         }
         

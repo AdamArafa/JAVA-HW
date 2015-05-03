@@ -18,8 +18,8 @@ public class MASTER extends JFrame implements ActionListener {
 
     private int guessTimes;
     private UserPanel uPanel;
-    private PPlayer pp;
-    private PPlayer pc;
+    private Player pp;
+    private Player pc;
     
     MASTER() {
         initComponents();
@@ -31,8 +31,8 @@ public class MASTER extends JFrame implements ActionListener {
     
     private void initComponents() {
         guessTimes = 0;
-        pp = new PPlayer();
-        pc = new PPlayer();
+        pp = new Player();
+        pc = new Player();
         // here is the answer
         System.out.println(pc.getPlayerColor());
         setResizable(false);
@@ -136,7 +136,7 @@ public class MASTER extends JFrame implements ActionListener {
                 else {
 
                     pp.setPlayerColor(uMaster);
-                    PPlayer.PinCount count = PPlayer.compare(pp, pc);
+                    Player.PinCount count = Player.compare(pp, pc);
                     uPanel.trials[guessTimes].bkField.setText("" + count.BKCount);
                     uPanel.trials[guessTimes].whField.setText("" + count.WHCount);
                     guessTimes++;
