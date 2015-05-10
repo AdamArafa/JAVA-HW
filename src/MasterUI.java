@@ -46,16 +46,114 @@ public class MasterUI extends JFrame implements ActionListener {
     private JButton jButton7;
     private JButton[] jBtnFlags;
     
-    private JTextField[] jTfTriel;
-    private JButton[] jBnFlagB;
-    private JTextField[] jTFieldB;
-    private JButton[] jBnFlagW;
-    private JTextField[] jTFieldW;
-    
     private final String colors[] = {"R", "G", "B", "Y", "O"};
     private String uMaster = "";
-    
+    private UserPanel myPanel;
     private ArrayList<String> Colors;
+    
+    class UserPanel extends JPanel {
+        class Trial extends JPanel {
+            JTextField jTxtfield;
+            JButton blackPin;
+            JTextField bkField;
+            JButton whitePin;
+            JTextField whField;
+            private int id;
+            Trial(int num) {
+                setLayout(new FlowLayout());
+                add(new JLabel("Trial" + String.format("%d", num)));
+                add(jTxtfield = new JTextField(5));
+                add(blackPin  = new JButton("B"));
+                blackPin.setActionCommand("B"+num);
+                blackPin.addActionListener(new myPanelListener());
+                add(bkField  = new JTextField("-1"));
+                add(whitePin  = new JButton("W"));
+                whitePin.setActionCommand("W"+num);
+                whitePin.addActionListener(new myPanelListener());
+                add(whField  = new JTextField("-1"));
+                jTxtfield.setEditable(false);
+                bkField.setEditable(false);
+                whField.setEditable(false);
+                setButtonDisable(false);
+                this.id = num;
+            }
+            void setButtonDisable(boolean enabled) {
+                blackPin.setEnabled(enabled);
+                whitePin.setEnabled(enabled);
+            }
+            
+        }
+        public Trial[] trials;
+        UserPanel() {
+            this.setLayout(new GridLayout(0, 1));
+            this.trials = new Trial[10];
+            for (int i = 0; i < 10; i++) {
+                add(this.trials[i] = new Trial(i));
+            }
+        }
+        public void enableBtns() {
+            for (int i = 0; i < 10; i++) {
+                trials[i].setButtonDisable(true);
+            }
+        }
+        private void calc(int index, int b, int w) {
+            int lastOne = index - 1;
+            if (b == 5) {
+                jTextField2.setText("win");
+            } else
+            if (lastOne > -1) {
+                int lb = parseInt(this.trials[lastOne].bkField.getText());
+                int lw = parseInt(this.trials[lastOne].whField.getText());
+                if (lb > -1 && lw > -1) {
+                    this.trials[lastOne].setButtonDisable(false);
+                    Colors = Player.removePossibale(Colors, new Player(this.trials[lastOne].jTxtfield.getText()), lb, lw);
+                    if (Colors.isEmpty()) {
+                        jTextField2.setText("lose");
+                    }
+                    else {
+                        this.trials[index].jTxtfield.setText(Colors.get(0));
+                    }
+                }
+            }
+            String tmp = this.trials[index].jTxtfield.getText();
+            System.out.println(tmp);
+            Colors = Player.removePossibaleD(Colors, new Player(tmp), b, w);
+            if (index < 9) {
+                if (Colors.isEmpty()) {
+                    jTextField2.setText("lose");
+                }
+                else {
+                    this.trials[index+1].jTxtfield.setText(Colors.get(0));
+                } 
+            }
+        }
+        class myPanelListener implements ActionListener {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String cmd = e.getActionCommand();
+                char whichColor = cmd.charAt(0);
+                System.out.println(whichColor);
+                int index = Character.getNumericValue(cmd.charAt(1));
+                System.out.println(index);
+                int b = parseInt(myPanel.trials[index].bkField.getText());
+                int w = parseInt(myPanel.trials[index].whField.getText());
+                calc(index, b, w);
+                if (whichColor == 'B') {
+                    ++b;
+                    if (b <= 5 && b + w <= 5) {
+                        myPanel.trials[index].bkField.setText("" + b);
+                    }
+                }
+                else {
+                    ++w;
+                    if (b <= 5 && b + w <= 5) {
+                        myPanel.trials[index].whField.setText("" + w);
+                    }
+                }
+            }
+        }
+        
+    }
     
     private void initComponents() {
         
@@ -89,38 +187,7 @@ public class MasterUI extends JFrame implements ActionListener {
         }
         getContentPane().add(jButton6, new GridBagConstraints(0, 2, 3, 1, 1, 0, GridBagConstraints.BOTH, GridBagConstraints.NORTH));
         getContentPane().add(jButton7, new GridBagConstraints(3, 2, 2, 1, 1, 0, GridBagConstraints.BOTH, GridBagConstraints.NORTH));
-        
-        JPanel jPanel = new JPanel();
-        jPanel.setLayout(new GridBagLayout());
-        jTfTriel = new JTextField[10];
-        jBnFlagB = new JButton[10];
-        jTFieldB = new JTextField[10];
-        jBnFlagW = new JButton[10];
-        jTFieldW = new JTextField[10];
-        for (int i = 0; i < 10; ++i) {
-            JLabel jLabelTriel = new JLabel(" triel" + i);
-            jLabelTriel.setHorizontalAlignment(JLabel.CENTER);
-            jTfTriel[i] = new JTextField();
-            jTfTriel[i].setEditable(false);
-            jBnFlagB[i] = new JButton("B");
-            jTFieldB[i] = new JTextField("-1");
-            jTFieldB[i].setEditable(false);
-            jBnFlagW[i] = new JButton("W");
-            jTFieldW[i] = new JTextField("-1");
-            jTFieldW[i].setEditable(false);
-            jBnFlagB[i].setActionCommand("triel");
-            jBnFlagB[i].addActionListener(this);
-            jBnFlagW[i].setActionCommand("triel");
-            jBnFlagW[i].addActionListener(this);
-            jPanel.add(jLabelTriel, new GridBagConstraints(0, i, 1, 1, 0, 1, GridBagConstraints.NONE, GridBagConstraints.CENTER));
-            jPanel.add(jTfTriel[i], new GridBagConstraints(1, i, 3, 1, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.CENTER));
-            jPanel.add(jBnFlagB[i], new GridBagConstraints(4, i, 1, 1, 0, 1, GridBagConstraints.NONE, GridBagConstraints.CENTER));
-            jPanel.add(jTFieldB[i], new GridBagConstraints(5, i, 2, 1, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.CENTER));
-            jPanel.add(jBnFlagW[i], new GridBagConstraints(7, i, 1, 1, 0, 1, GridBagConstraints.NONE, GridBagConstraints.CENTER));
-            jPanel.add(jTFieldW[i], new GridBagConstraints(8, i, 2, 1, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.CENTER));
-            
-        }
-        getContentPane().add(jPanel, new GridBagConstraints(0, 3, 10, 5, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER));
+        getContentPane().add(myPanel = new UserPanel(), new GridBagConstraints(0, 3, 10, 5, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER));
         getContentPane().add(jTextField2, new GridBagConstraints(0, 13, 5, 1, 0, 0, GridBagConstraints.BOTH, GridBagConstraints.SOUTH));        
         pack();
     }
@@ -145,72 +212,19 @@ public class MasterUI extends JFrame implements ActionListener {
                 jTextField2.setText("Input Error!");
              }
             else {
-                for (int i = 0; i < 5; ++i) {
-                    jBtnFlags[i].setEnabled(false);
-                }
+                // for (int i = 0; i < 5; ++i) {
+                    // jBtnFlags[i].setEnabled(false);
+                // }
+                myPanel.enableBtns();
                 jButton6.setEnabled(false);
                 jButton7.setEnabled(false);
                 jTextField2.setText("");
                 this.Colors = Player.getColors();
-                jTfTriel[0].setText(Colors.get(0));
-            }
-        }
-        if (cmd.equals("triel")) {
-            int indeOfFlagB = java.util.Arrays.asList(jBnFlagB).indexOf(e.getSource());
-            int indeOfFlagW = java.util.Arrays.asList(jBnFlagW).indexOf(e.getSource());
-            if (indeOfFlagB > -1) {
-                int b = parseInt(jTFieldB[indeOfFlagB].getText());
-                int w = parseInt(jTFieldW[indeOfFlagB].getText());
-                calc(indeOfFlagB, b, w);
-                ++b;
-                if (b <= 5 && b + w <= 5) {
-                    jTFieldB[indeOfFlagB].setText("" + b);
-                }
-                if (b + w == 5) {
-                    
-                }
-            }
-            if (indeOfFlagW > -1) {
-                int b = parseInt(jTFieldB[indeOfFlagW].getText());
-                int w = parseInt(jTFieldW[indeOfFlagW].getText());
-                calc(indeOfFlagW, b, w);
-                ++w;
-                if (b <= 5 && b + w <= 5) {
-                    jTFieldW[indeOfFlagW].setText("" + w);
-                }
+                //jTfTriel[0].setText(Colors.get(0));
+                myPanel.trials[0].jTxtfield.setText(Colors.get(0));
             }
         }
         
-    }
-    private void calc(int index, int b, int w) {
-        int lastOne = index - 1;
-        if (b == 5) {
-            jTextField2.setText("win");
-        } else
-        if (lastOne > -1) {
-            int lb = parseInt(jTFieldB[lastOne].getText());
-            int lw = parseInt(jTFieldW[lastOne].getText());
-            if (lb > -1 && lw > -1) {
-                jBnFlagB[lastOne].setEnabled(false);
-                jBnFlagW[lastOne].setEnabled(false);
-                Colors = Player.removePossibale(Colors, new Player(jTfTriel[lastOne].getText()), lb, lw);
-                if (Colors.isEmpty()) {
-                    jTextField2.setText("lose");
-                }
-                else {
-                    jTfTriel[index].setText(Colors.get(0));
-                }
-            }
-        }
-        Colors = Player.removePossibaleD(Colors, new Player(jTfTriel[index].getText()), b, w);
-        if (index < 9) {
-            if (Colors.isEmpty()) {
-                jTextField2.setText("lose");
-            }
-            else {
-                jTfTriel[index+1].setText(Colors.get(0));
-            } 
-        }
     }
     
 }
