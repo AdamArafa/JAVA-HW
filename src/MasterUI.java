@@ -7,6 +7,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import static java.lang.Integer.parseInt;
+import java.util.ArrayList;
 import javax.swing.*;
 /**
  *
@@ -53,6 +54,8 @@ public class MasterUI extends JFrame implements ActionListener {
     
     private final String colors[] = {"R", "G", "B", "Y", "O"};
     private String uMaster = "";
+    
+    private ArrayList<String> Colors;
     
     private void initComponents() {
         
@@ -101,8 +104,10 @@ public class MasterUI extends JFrame implements ActionListener {
             jTfTriel[i].setEditable(false);
             jBnFlagB[i] = new JButton("B");
             jTFieldB[i] = new JTextField("-1");
+            jTFieldB[i].setEditable(false);
             jBnFlagW[i] = new JButton("W");
             jTFieldW[i] = new JTextField("-1");
+            jTFieldW[i].setEditable(false);
             jBnFlagB[i].setActionCommand("triel");
             jBnFlagB[i].addActionListener(this);
             jBnFlagW[i].setActionCommand("triel");
@@ -145,31 +150,67 @@ public class MasterUI extends JFrame implements ActionListener {
                 }
                 jButton6.setEnabled(false);
                 jButton7.setEnabled(false);
-                jTextField2.setText("Not done yet :P");
+                jTextField2.setText("");
+                this.Colors = Player.getColors();
+                jTfTriel[0].setText(Colors.get(0));
             }
         }
         if (cmd.equals("triel")) {
             int indeOfFlagB = java.util.Arrays.asList(jBnFlagB).indexOf(e.getSource());
             int indeOfFlagW = java.util.Arrays.asList(jBnFlagW).indexOf(e.getSource());
             if (indeOfFlagB > -1) {
-                int c = parseInt(jTFieldB[indeOfFlagB].getText());
-                // TODO
-                ++c;
-                if (c <= 5 && c + parseInt(jTFieldW[indeOfFlagB].getText()) <= 5) {
-                    jTFieldB[indeOfFlagB].setText("" + c);
+                int b = parseInt(jTFieldB[indeOfFlagB].getText());
+                int w = parseInt(jTFieldW[indeOfFlagB].getText());
+                calc(indeOfFlagB, b, w);
+                ++b;
+                if (b <= 5 && b + w <= 5) {
+                    jTFieldB[indeOfFlagB].setText("" + b);
+                }
+                if (b + w == 5) {
+                    
                 }
             }
             if (indeOfFlagW > -1) {
-                int c = parseInt(jTFieldW[indeOfFlagW].getText());
-                // TODO
-                ++c;
-                if (c <= 5 && c + parseInt(jTFieldB[indeOfFlagW].getText()) <= 5) {
-                    jTFieldW[indeOfFlagW].setText("" + c);
+                int b = parseInt(jTFieldB[indeOfFlagW].getText());
+                int w = parseInt(jTFieldW[indeOfFlagW].getText());
+                calc(indeOfFlagW, b, w);
+                ++w;
+                if (b <= 5 && b + w <= 5) {
+                    jTFieldW[indeOfFlagW].setText("" + w);
                 }
             }
         }
         
     }
-    
+    private void calc(int index, int b, int w) {
+        int lastOne = index - 1;
+        if (b == 5) {
+            jTextField2.setText("win");
+        } else
+        if (lastOne > -1) {
+            int lb = parseInt(jTFieldB[lastOne].getText());
+            int lw = parseInt(jTFieldW[lastOne].getText());
+            if (lb > -1 && lw > -1) {
+                jBnFlagB[lastOne].setEnabled(false);
+                jBnFlagW[lastOne].setEnabled(false);
+                Colors = Player.removePossibale(Colors, new Player(jTfTriel[lastOne].getText()), lb, lw);
+                if (Colors.isEmpty()) {
+                    jTextField2.setText("lose");
+                }
+                else {
+                    jTfTriel[index].setText(Colors.get(0));
+                }
+            }
+        }
+        Colors = Player.removePossibaleD(Colors, new Player(jTfTriel[index].getText()), b, w);
+        if (index < 9) {
+            if (Colors.isEmpty()) {
+                jTextField2.setText("lose");
+            }
+            else {
+                jTfTriel[index+1].setText(Colors.get(0));
+            } 
+        }
+    }
     
 }

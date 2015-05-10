@@ -13,49 +13,51 @@ import java.util.*;
  */
 public class Player {
     private static char[][] colors = new char[3125][5];
-    private static final char[] avail = {'R', 'G', 'B', 'Y', 'O'};
+    private static final char[] color = {'R', 'G', 'B', 'Y', 'O'};
     private static int[] next = new int[3125];
     private static int index = 0;
     private char[] playerColor = new char[5];
     private boolean[] check = new boolean[5];
-    static{
-        int I,J,K,M,N;
-        for (I = 0; I < 5; I++)
-            for (J = 0; J < 5; J++)
-                for (K = 0; K < 5; K++)
-                    for (M = 0; M < 5; M++)
-                        for (N = 0; N < 5; N++){
-                            colors[index][0] = avail[I];
-                            colors[index][1] = avail[J];
-                            colors[index][2] = avail[K];
-                            colors[index][3] = avail[M];
-                            colors[index][4] = avail[N];
-                            next[index] = ++index;
+    static {
+        for (int i = 0; i < 5; ++i)
+            for (int j = 0; j < 5; ++j)
+                for (int k = 0; k < 5; ++k)
+                    for (int m = 0; m < 5; ++m)
+                        for (int n = 0; n < 5; ++n) {
+                            colors[index][0] = color[i];
+                            colors[index][1] = color[j];
+                            colors[index][2] = color[k];
+                            colors[index][3] = color[m];
+                            colors[index][4] = color[n];
+                            next[index++] = 0;
                         }
-        Arrays.fill(next, 0);
     }
 
     public Player() {
         setComputerColor();
     }
     
-    public static PinCount compare(Player A, Player Q){
+    public Player(String color) {
+        setPlayerColor(color);
+    }
+    
+    public static PinCount compare(Player A, Player Q) {
         int blackPinCount = 0;
         int whitePinCount = 0;
         Arrays.fill(A.check, true);
         Arrays.fill(Q.check, true);
-        for(int i = 0; i < Q.playerColor.length; i++){
+        for(int i = 0; i < Q.playerColor.length; i++) {
             if(A.playerColor[i] == Q.playerColor[i]) {
                 A.check[i] = Q.check[i] = false;
                 blackPinCount++;
             }
         }
-        for(int i = 0;i < Q.playerColor.length;i++){
-            for (int j = 0; j < Q.playerColor.length;j++){
-                if (Q.check[i] && A.check[j]){
-                    if (A.playerColor[j] == Q.playerColor[i]){
+        for (int i = 0;i < Q.playerColor.length;i++) {
+            for (int j = 0; j < Q.playerColor.length;j++) {
+                if (Q.check[i] && A.check[j]) {
+                    if (A.playerColor[j] == Q.playerColor[i]) {
                         A.check[j] = Q.check[i] =false;
-                        whitePinCount++;
+                        ++whitePinCount;
                     }
                 }
             }
@@ -63,24 +65,24 @@ public class Player {
         return new PinCount(blackPinCount, whitePinCount);
     }
 
-    public void setPlayerColor(String input){
-        for(int i = 0; i < 5; i++){
+    public void setPlayerColor(String input) {
+        for (int i = 0; i < 5; ++i) {
             playerColor[i] = input.charAt(i);
         }
     }
 
-    public void setComputerColor(){
+    public void setComputerColor() {
         Random ran = new Random();
         int temp;
-        do{
+        do {
             temp = ran.nextInt(3125);
             playerColor = colors[temp];
-        }while(next[temp] != 0);
+        } while(next[temp] != 0);
         next[temp] = 1;
     }
 
-    public boolean isColorExiest(Character A){
-        for (int i = 0; i < 5; i++){
+    public boolean isColorExiest(Character A) {
+        for (int i = 0; i < 5; ++i){
             if (playerColor[i] == A) return true;
         }
         return false;
@@ -90,13 +92,45 @@ public class Player {
         return Arrays.toString(playerColor);
     }
     
-    static class PinCount{
+    static class PinCount {
         int BKCount;
         int WHCount;
 
-        PinCount(int BKCount, int WHCount){
+        PinCount(int BKCount, int WHCount) {
             this.BKCount = BKCount;
             this.WHCount = WHCount;
         }
+    }
+    
+    static ArrayList<String> getColors() {
+        ArrayList<String> Colors = new ArrayList<>();
+        for (int i = 0; i < index; ++i) {
+            Colors.add(new String(colors[i]));
+        }
+        return Colors;
+    }
+    
+    static ArrayList<String> removePossibaleD(ArrayList<String> Colors, Player A, int B, int W) {
+        ArrayList<String> Possibale = new ArrayList<>();
+        for (String tc : Colors) {
+            PinCount tmp = compare(A, new Player(tc));
+            if (tmp.BKCount >= B && tmp.WHCount >= W) {
+                Possibale.add(tc);
+            }
+            
+        }
+        return Possibale;
+    }
+    
+    static ArrayList<String> removePossibale(ArrayList<String> Colors, Player A, int B, int W) {
+        ArrayList<String> Possibale = new ArrayList<>();
+        for (String tc : Colors) {
+            PinCount tmp = compare(A, new Player(tc));
+            if (tmp.BKCount == B && tmp.WHCount == W) {
+                Possibale.add(tc);
+            }
+            
+        }
+        return Possibale;
     }
 }
