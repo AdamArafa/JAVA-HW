@@ -115,9 +115,7 @@ public class MasterUI extends JFrame implements ActionListener {
                     }
                 }
             }
-            String tmp = this.trials[index].jTxtfield.getText();
-            System.out.println(tmp);
-            Colors = Player.removePossibaleD(Colors, new Player(tmp), b, w);
+            Colors = Player.removePossibaleD(Colors, new Player(trials[index].jTxtfield.getText()), b, w);
             if (index < 9) {
                 if (Colors.isEmpty()) {
                     jTextField2.setText("lose");
@@ -132,9 +130,7 @@ public class MasterUI extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 String cmd = e.getActionCommand();
                 char whichColor = cmd.charAt(0);
-                System.out.println(whichColor);
                 int index = Character.getNumericValue(cmd.charAt(1));
-                System.out.println(index);
                 int b = parseInt(myPanel.trials[index].bkField.getText());
                 int w = parseInt(myPanel.trials[index].whField.getText());
                 calc(index, b, w);
@@ -200,7 +196,6 @@ public class MasterUI extends JFrame implements ActionListener {
             if (uMaster.length() < 5) {
                 uMaster += cmd;
                 jTextField1.setText(uMaster);
-                // System.out.println(cmd);
             }
         }
         if (cmd.equals("backspace")) {
@@ -212,9 +207,6 @@ public class MasterUI extends JFrame implements ActionListener {
                 jTextField2.setText("Input Error!");
              }
             else {
-                // for (int i = 0; i < 5; ++i) {
-                    // jBtnFlags[i].setEnabled(false);
-                // }
                 myPanel.enableBtns();
                 jButton6.setEnabled(false);
                 jButton7.setEnabled(false);
