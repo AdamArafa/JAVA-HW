@@ -1,6 +1,7 @@
 
 import java.applet.Applet;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.logging.*;
 
 /*
@@ -46,28 +47,38 @@ public class BouncingBalls extends Applet implements Runnable {
         offScrGC = offScrImage.getGraphics();
         Panel pBtns = new Panel();
         btnSuspend = new Button("Suspend");
+        btnSuspend.addActionListener(new btnListener());
         pBtns.add(btnSuspend);
         btnResume = new Button("Resume");
+        btnResume.addActionListener(new btnListener());
         pBtns.add(btnResume);
         btnPlusOne = new Button("+1");
+        btnPlusOne.addActionListener(new btnListener());
         pBtns.add(btnPlusOne);
         btnMinusOne = new Button("-1");
+        btnMinusOne.addActionListener(new btnListener());
         pBtns.add(btnMinusOne);
         add(pBtns, BorderLayout.SOUTH);
     }
 
-    @Override
-    public boolean mouseUp( Event e, int x, int y ) {
-        if( suspended ) {
-            animator.resume();
-            suspended = false;
-        } else {
-            animator.suspend();
-            suspended = true;
-        }
-        return true;
-    }
+    class btnListener implements ActionListener {
 
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == btnSuspend) {
+                stop();
+            }
+            else if (e.getSource() == btnResume) {
+                start();
+            }
+            else if (e.getSource() == btnPlusOne) {
+
+            }
+            else if (e.getSource() == btnMinusOne) {
+
+            }
+        }
+    }
 
     @Override
     public void paint( Graphics g ) {
