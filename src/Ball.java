@@ -17,6 +17,7 @@ public class Ball {
     private int rx, ry;
     private int vx, vy;
     private int radius;
+    private int w, h;
     private final int speed = 10;
     private Color c;
     public Ball hitBy;
@@ -30,6 +31,8 @@ public class Ball {
         c = new Color(r, g, b);
 
         this.radius = radius;
+        this.w = w;
+        this.h = h;
         rx = (int) Math.ceil(Math.random() * w);
         ry = (int) Math.ceil(Math.random() * h);
         vx = (int) Math.ceil(speed * d);
@@ -75,7 +78,7 @@ public class Ball {
         other.hitBy = this;
     }
 
-    public void bounceOffWalls(int w, int h) {
+    public void bounceOffWalls() {
         if(((rx-radius) <= 0 && vx < 0) || ((rx+radius) >= w && vx > 0))
             vx = -vx;
         if(((ry-radius) <= 0 && vy < 0) || ((ry+radius) >= h && vy > 0))

@@ -2,6 +2,7 @@
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.logging.*;
 
 /*
@@ -21,27 +22,22 @@ public class BouncingBalls extends Applet implements Runnable {
     private boolean suspended = false;
     private Image offScrImage;
     private Graphics offScrGC;
-    private Ball balls[];
+    private ArrayList<Ball> balls;
 
     int w, h;
-    int n = 5;
     int maxSpeed = 10;
 
     @Override
     public void init() {
 
-        balls = new Ball[ n ];
+        balls = new ArrayList<>();
         setSize(400, 400);
         this.setVisible(true);
         w = getWidth();
         h = getHeight() - 50;
         setLayout(new BorderLayout());
         
-        balls[0] = new Ball(15, w, h);
-        balls[1] = new Ball(15, w, h);
-        balls[2] = new Ball(15, w, h);
-        balls[3] = new Ball(15, w, h);
-        balls[4] = new Ball(15, w, h);
+        balls.add(new Ball(15, w, h));
         
         offScrImage = createImage(w, h);
         offScrGC = offScrImage.getGraphics();
@@ -78,10 +74,11 @@ public class BouncingBalls extends Applet implements Runnable {
                 }
             }
             else if (e.getSource() == btnPlusOne) {
-
+                balls.add(new Ball(15, w, h));
             }
             else if (e.getSource() == btnMinusOne) {
-
+                if (balls.size() > 1)
+                    balls.remove(0);
             }
         }
     }
@@ -111,17 +108,18 @@ public class BouncingBalls extends Applet implements Runnable {
             offScrGC.setColor(Color.white);
             offScrGC.fillRect(0, 0, w, h);
 
-            for( int i = 0; i < n; i++ )
-                balls[i].hitBy = null;
+            for (Ball ball : balls) {
+                ball.hitBy = null;
+            }
 
-            for( int i = 0; i < n; i++ ) {
-                balls[i].move();
-                balls[i].bounceOffWalls(w, h);
-                for( int j = 0; j < n; j++ ) {
-                    if( i != j && balls[i].touches(balls[j]))
-                        balls[i].hits( balls[j] );
+            for (Ball ball : balls) {
+                ball.move();
+                ball.bounceOffWalls();
+                for (int i = 0; i < balls.size(); ++i) {
+                    if (!ball.equals(balls.get(i)) && ball.touches(balls.get(i)))
+                        ball.hits(balls.get(i));
                 }
-                balls[i].paint( offScrGC );
+                ball.paint(offScrGC);
             }
 
             try {
