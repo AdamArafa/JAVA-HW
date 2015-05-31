@@ -66,10 +66,16 @@ public class BouncingBalls extends Applet implements Runnable {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == btnSuspend) {
-                stop();
+                if (!suspended) {
+                    stop();
+                    suspended = true;
+                }
             }
             else if (e.getSource() == btnResume) {
-                start();
+                if (suspended) {
+                    start();
+                    suspended = false;
+                }
             }
             else if (e.getSource() == btnPlusOne) {
 
