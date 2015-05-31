@@ -82,6 +82,7 @@ public class Calculator extends Applet implements ActionListener {
     
     private String equlMethod() {
         currNum = getTextDouble();
+        if (!erase && lastOpt == OpNone) return df.format(currNum);
         double result = 0.0;
         String text = "";
         switch (lastOpt) {
@@ -145,8 +146,11 @@ public class Calculator extends Applet implements ActionListener {
                 lastOpt = OpDivide;
                 break;
             case "sqrt":
-                result = Math.sqrt(result);
-                text = df.format(result);
+                if (result > 0) {
+                    result = Math.sqrt(result);
+                    text = df.format(result);
+                }
+                else text = "0";
                 break;
             case "%":
                 text = equlMethod();
@@ -194,8 +198,6 @@ public class Calculator extends Applet implements ActionListener {
                 else
                     text += cmd;
         }
-        tf.setText(text);
-        
+        tf.setText(text);   
     }
-    
 }
