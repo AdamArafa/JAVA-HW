@@ -17,14 +17,13 @@ public class Calculator extends Applet implements ActionListener {
 
     private TextField tf;
     private Button btnOff, btnBack, btnCE, btnC;
-    private Button[] btnMems;
-    private Button[] btnNums;
-    private Button[] btnOpts;
+    private Button[] btnKeys;
     
     private final String[] btnStrings = {"MC", "7", "8", "9", "/", "sqrt",
                                          "MR", "4", "5", "6", "*",    "%",
                                          "MS", "1", "2", "3", "-",  "1/x",
                                          "M+", "0", "±", ".", "+",    "="};
+    private Double Result;
     
     @Override
     public void init() {
@@ -52,12 +51,12 @@ public class Calculator extends Applet implements ActionListener {
         pNorth.add(pFunc);
         add(pNorth, BorderLayout.NORTH);
         Panel pBtns = new Panel(new GridLayout(4, 6));
-        btnMems = new Button[btnStrings.length];
+        btnKeys = new Button[btnStrings.length];
         for (int i = 0; i < btnStrings.length; ++i) {
-            btnMems[i] = new Button(btnStrings[i]);            
-            pBtns.add(btnMems[i]);
-            btnMems[i].setActionCommand(btnStrings[i]);
-            btnMems[i].addActionListener(this);
+            btnKeys[i] = new Button(btnStrings[i]);
+            pBtns.add(btnKeys[i]);
+            btnKeys[i].setActionCommand(btnStrings[i]);
+            btnKeys[i].addActionListener(this);
         }
         add(pBtns, BorderLayout.CENTER);
         this.setSize(400, 175);
@@ -65,7 +64,42 @@ public class Calculator extends Applet implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String cmd = e.getActionCommand();
+        switch (cmd) {
+            case "MC":
+                break;
+            case "MR":
+                break;
+            case "MS":
+                break;
+            case "M+":
+                break;
+            case "+":
+                break;
+            case "-":
+                break;
+            case "*":
+                break;
+            case "/":
+                break;
+            case "sqrt":
+                break;
+            case "%":
+                break;
+            case "1/x":
+                break;
+            case "=":
+                break;
+            case "±":
+                break;
+            case ".":
+                break;
+            case "Off":
+                System.exit(0);
+                break;
+            default:
+                // numbers
+        }
     }
     
 }
