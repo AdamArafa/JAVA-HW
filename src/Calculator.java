@@ -82,9 +82,9 @@ public class Calculator extends Applet implements ActionListener {
     
     private String equlMethod() {
         currNum = getTextDouble();
-        if (!erase && lastOpt == OpNone) return df.format(currNum);
+        // if (!erase && lastOpt == OpNone) return df.format(currNum);
         double result = 0.0;
-        String text = "";
+        String text;
         switch (lastOpt) {
             case OpPlus:
                 result = lastNum + currNum;
@@ -122,12 +122,16 @@ public class Calculator extends Applet implements ActionListener {
         Double result = getTextDouble();
         switch (cmd) {
             case "MC":
+                Memory = 0.0;
                 break;
             case "MR":
+                text = df.format(Memory);
                 break;
             case "MS":
+                Memory -= result;
                 break;
             case "M+":
+                Memory += result;
                 break;
             case "+":
                 text = equlMethod();
