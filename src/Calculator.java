@@ -59,7 +59,7 @@ public class Calculator extends Applet implements ActionListener {
             btnKeys[i].addActionListener(this);
         }
         add(pBtns, BorderLayout.CENTER);
-        this.setSize(400, 175);
+        setSize(400, 175);
     }
 
     @Override
