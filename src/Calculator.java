@@ -2,6 +2,7 @@
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.DecimalFormat;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -23,7 +24,13 @@ public class Calculator extends Applet implements ActionListener {
                                          "MR", "4", "5", "6", "*",    "%",
                                          "MS", "1", "2", "3", "-",  "1/x",
                                          "M+", "0", "±", ".", "+",    "="};
-    private Double Result;
+    private Double Memory = 0.0;
+    private Double lastNum = 0.0;
+    private Double currNum = 0.0;
+    private int lastOpt = 0;
+    private boolean erase = true;
+    private final static int OpNone = 0, OpPlus = 1, OpMinus = 2, OpMultiply = 3, OpDivide = 4;
+    private DecimalFormat df = new DecimalFormat("##########.##########");
     
     @Override
     public void init() {
@@ -59,12 +66,55 @@ public class Calculator extends Applet implements ActionListener {
             btnKeys[i].addActionListener(this);
         }
         add(pBtns, BorderLayout.CENTER);
-        setSize(400, 175);
+        setSize(400, 170);
     }
 
+    private Double getTextDouble() {
+        return Double.parseDouble(tf.getText());
+    }
+    
+    private void clearMethod() {
+        lastNum = 0.0;
+        currNum = 0.0;
+        lastOpt = OpNone;
+        erase = true;
+    }
+    
+    private String equlMethod(int op) {
+        currNum = getTextDouble();
+        double result = currNum;
+        String text = "";
+        try {
+            switch (op) {
+                case OpPlus:
+                    result = lastNum + currNum;
+                    break;
+                case OpMinus:
+                    result = lastNum - currNum;
+                    break;
+                case OpMultiply:
+                    result = lastNum * currNum;
+                    break;
+                case OpDivide:
+                    result = lastNum / currNum;
+                    break;
+            }
+            lastNum = currNum;
+            text = df.format(result);
+            erase = true;
+            lastOpt = OpNone;
+        } catch (Exception ex) {
+            tf.setText("ERROR: " + ex.getMessage());
+            clearMethod();
+        }
+        return text;
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
+        String text = tf.getText();
+        Double result = getTextDouble();
         switch (cmd) {
             case "MC":
                 break;
@@ -75,31 +125,73 @@ public class Calculator extends Applet implements ActionListener {
             case "M+":
                 break;
             case "+":
+                text = equlMethod(OpPlus);
+                lastOpt = OpPlus;
                 break;
             case "-":
+                text = equlMethod(OpMinus);
+                lastOpt = OpMinus;
                 break;
             case "*":
+                text = equlMethod(OpMultiply);
+                lastOpt = OpMultiply;
                 break;
             case "/":
+                text = equlMethod(OpDivide);
+                lastOpt = OpDivide;
                 break;
             case "sqrt":
+                result = Math.sqrt(result);
+                text = df.format(result);
                 break;
             case "%":
+                result %= result;
+                text = df.format(result);
                 break;
             case "1/x":
+                result = 1 / result;
+                text = df.format(result);
                 break;
             case "=":
+                text = equlMethod(lastOpt);
                 break;
             case "±":
+                result = -result;
+                text = df.format(result);
                 break;
             case ".":
+                if (erase) {
+                    text = "0";
+                    erase = false;
+                }
+                text = text.contains(".") ? df.format(result) : df.format(result) + ".";
                 break;
             case "Off":
                 System.exit(0);
                 break;
+            case "CE":
+                clearMethod();
+                break;
+            case "C":
+                text = "0";
+                break;
+            case "Back":
+                text = text.substring(0, text.length()-1);
+                if (text.length() == 0) text = "0";
+                break;
             default:
                 // numbers
+                if (erase) {
+                    text = "0";
+                    erase = false;
+                }
+                if (text.length() == 1 && text.charAt(0) == '0')
+                    text = cmd;
+                else
+                    text += cmd;
         }
+        tf.setText(text);
+        
     }
     
 }
