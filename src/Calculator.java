@@ -29,7 +29,7 @@ public class Calculator extends Applet implements ActionListener {
     private Double currNum = 0.0;
     private int lastOpt = 0;
     private boolean erase = true;
-    private final static int OpNone = 0, OpPlus = 1, OpMinus = 2, OpMultiply = 3, OpDivide = 4;
+    private final static int OpNone = 0, OpPlus = 1, OpMinus = 2, OpMultiply = 3, OpDivide = 4, OpMod = 5;
     private DecimalFormat df = new DecimalFormat("##########.##########");
     
     @Override
@@ -80,33 +80,37 @@ public class Calculator extends Applet implements ActionListener {
         erase = true;
     }
     
-    private String equlMethod(int op) {
+    private String equlMethod() {
         currNum = getTextDouble();
-        double result = currNum;
+        double result = 0.0;
         String text = "";
-        try {
-            switch (op) {
-                case OpPlus:
-                    result = lastNum + currNum;
-                    break;
-                case OpMinus:
-                    result = lastNum - currNum;
-                    break;
-                case OpMultiply:
-                    result = lastNum * currNum;
-                    break;
-                case OpDivide:
-                    result = lastNum / currNum;
-                    break;
-            }
-            lastNum = currNum;
-            text = df.format(result);
-            erase = true;
-            lastOpt = OpNone;
-        } catch (Exception ex) {
-            tf.setText("ERROR: " + ex.getMessage());
-            clearMethod();
+        switch (lastOpt) {
+            case OpPlus:
+                result = lastNum + currNum;
+                break;
+            case OpMinus:
+                result = lastNum - currNum;
+                break;
+            case OpMultiply:
+                result = lastNum * currNum;
+                break;
+            case OpDivide:
+                if (currNum == 0) {
+                    clearMethod();
+                    return "0";
+                }
+                result = lastNum / currNum;
+                break;
+            case OpMod:
+                result = lastNum % currNum;
+                break;
+            case OpNone:
+                result = currNum;
         }
+        lastNum = currNum;
+        text = df.format(result);
+        erase = true;
+        lastOpt = OpNone;
         return text;
     }
     
@@ -125,19 +129,19 @@ public class Calculator extends Applet implements ActionListener {
             case "M+":
                 break;
             case "+":
-                text = equlMethod(OpPlus);
+                text = equlMethod();
                 lastOpt = OpPlus;
                 break;
             case "-":
-                text = equlMethod(OpMinus);
+                text = equlMethod();
                 lastOpt = OpMinus;
                 break;
             case "*":
-                text = equlMethod(OpMultiply);
+                text = equlMethod();
                 lastOpt = OpMultiply;
                 break;
             case "/":
-                text = equlMethod(OpDivide);
+                text = equlMethod();
                 lastOpt = OpDivide;
                 break;
             case "sqrt":
@@ -145,15 +149,15 @@ public class Calculator extends Applet implements ActionListener {
                 text = df.format(result);
                 break;
             case "%":
-                result %= result;
-                text = df.format(result);
+                text = equlMethod();
+                lastOpt = OpMod;
                 break;
             case "1/x":
                 result = 1 / result;
                 text = df.format(result);
                 break;
             case "=":
-                text = equlMethod(lastOpt);
+                text = equlMethod();
                 break;
             case "±":
                 result = -result;
@@ -171,13 +175,13 @@ public class Calculator extends Applet implements ActionListener {
                 break;
             case "CE":
                 clearMethod();
-                break;
-            case "C":
                 text = "0";
                 break;
+            case "C":
+                erase = true;
             case "Back":
                 text = text.substring(0, text.length()-1);
-                if (text.length() == 0) text = "0";
+                if (text.length() == 0 || (text.length() == 1 && text.charAt(0) == '-')) text = "0";
                 break;
             default:
                 // numbers
